@@ -8,7 +8,9 @@ use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\PaymentProofController;
 use App\Http\Controllers\Api\PaymentVerificationController;
 use App\Http\Controllers\Api\ReportController;
+use App\Http\Controllers\Api\SubscriptionController;
 use App\Http\Controllers\Api\WebhookController;
+use App\Http\Middleware\CheckSubscriptionLimitMiddleware;
 use Illuminate\Support\Facades\Route;
 
 // Public Auth & Webhook routes
@@ -24,6 +26,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // User profile & auth
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
+
+    // Subscription & Billing API
+    Route::get('/subscription', [SubscriptionController::class, 'show']);
+    Route::post('/subscription/upgrade', [SubscriptionController::class, 'upgrade']);
+    Route::get('/subscription/plans', [SubscriptionController::class, 'plans']);
 
     // Dashboard Analytics API
     Route::get('/dashboard/stats', [DashboardController::class, 'stats']);
@@ -53,6 +60,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/payments/{id}/analysis', [PaymentController::class, 'analysis']);
     Route::get('/payments/{id}/reconciliation', [PaymentController::class, 'reconciliation']);
 
-    // Human Verification API
-    Route::post('/payments/{id}/verify', [PaymentVerificationController::class, 'verify']);
+    // Human Verification API (Quota-Enforced)
+    Route::post('/payments/{id}/verify', [PaymentVerificationController::class, 'verify'])
+        ->middleware(CheckSubscriptionLimitMiddleware::class);
 });
