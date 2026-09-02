@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Domain\PaymentProviders\Services\PaymentProviderService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePaymentRequest;
 use App\Models\Invoice;
@@ -51,6 +52,14 @@ class PaymentController extends Controller
             'expires_at' => now()->addHours(24),
         ]);
 
+        // Generate QRIS details from provider
+        $providerService = new PaymentProviderService;
+        $qrisData = $providerService->getProvider()->createQrisPayment($payment);
+
+        $payment->update([
+            'qr_code_url' => $qrisData->qrCodeUrl,
+        ]);
+
         AuditLoggerService::log(
             action: 'payment.created',
             resourceType: Payment::class,
@@ -59,12 +68,14 @@ class PaymentController extends Controller
                 'payment_number' => $payment->payment_number,
                 'invoice_number' => $invoice->invoice_number,
                 'expected_amount' => $payment->expected_amount,
+                'qr_code_url' => $qrisData->qrCodeUrl,
             ]
         );
 
         return response()->json([
             'message' => 'Payment record initialized.',
-            'payment' => $payment->load('invoice'),
+            'qris' => $qrisData->toArray(),
+            'payment' => $payment->fresh(['invoice']),
         ], 201);
     }
 

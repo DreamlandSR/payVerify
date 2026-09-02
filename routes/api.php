@@ -6,13 +6,16 @@ use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\PaymentProofController;
 use App\Http\Controllers\Api\PaymentVerificationController;
+use App\Http\Controllers\Api\WebhookController;
 use Illuminate\Support\Facades\Route;
 
-// Public Auth routes
+// Public Auth & Webhook routes
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
 });
+
+Route::post('/webhooks/{provider}', [WebhookController::class, 'handle']);
 
 // Authenticated routes
 Route::middleware('auth:sanctum')->group(function () {
