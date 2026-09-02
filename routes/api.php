@@ -43,6 +43,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Payment Validation & Risk Analysis API
     Route::get('/payments/{id}/analysis', [PaymentController::class, 'analysis']);
+    Route::get('/payments/{id}/reconciliation', [PaymentController::class, 'reconciliation']);
 
     // Human Verification API
     Route::post('/payments/{id}/verify', [PaymentVerificationController::class, 'verify']);

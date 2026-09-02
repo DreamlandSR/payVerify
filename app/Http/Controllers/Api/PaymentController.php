@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Domain\PaymentProviders\Services\PaymentProviderService;
+use App\Domain\Reconciliation\Services\ReconciliationService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePaymentRequest;
 use App\Models\Invoice;
@@ -113,5 +114,18 @@ class PaymentController extends Controller
             'validation' => $payment->validationResult,
             'risk' => $payment->riskAssessment,
         ]);
+    }
+
+    /**
+     * Perform 3-way reconciliation for a payment.
+     */
+    public function reconciliation(string $id): JsonResponse
+    {
+        $payment = Payment::findOrFail($id);
+
+        $reconciliationService = new ReconciliationService;
+        $report = $reconciliationService->reconcile($payment);
+
+        return response()->json($report);
     }
 }
