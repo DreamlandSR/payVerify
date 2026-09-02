@@ -36,4 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Payment Proof API
     Route::post('/payments/{id}/proof', [PaymentProofController::class, 'upload']);
     Route::get('/payments/{id}/proof', [PaymentProofController::class, 'show']);
+
+    // Payment Validation & Risk Analysis API
+    Route::get('/payments/{id}/analysis', [PaymentController::class, 'analysis']);
 });

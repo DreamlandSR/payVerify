@@ -4,6 +4,8 @@ namespace App\Jobs;
 
 use App\Domain\AI\Contracts\AIExtractionProviderInterface;
 use App\Domain\AI\Services\AIExtractionService;
+use App\Domain\Validation\Services\PaymentValidationService;
+use App\Domain\Validation\Services\RiskAnalysisService;
 use App\Models\Payment;
 use App\Models\PaymentExtraction;
 use App\Models\PaymentProof;
@@ -56,6 +58,14 @@ class ProcessPaymentProofAiJob implements ShouldQueue
         ]);
 
         if ($result->success) {
+            // Run validation engine
+            $validationService = new PaymentValidationService;
+            $validationService->validate($payment, $extraction);
+
+            // Run risk analysis engine
+            $riskAnalysisService = new RiskAnalysisService;
+            $riskAnalysisService->assess($payment, $extraction);
+
             $payment->update([
                 'status' => Payment::STATUS_WAITING_VERIFICATION,
             ]);

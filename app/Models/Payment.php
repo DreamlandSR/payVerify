@@ -29,6 +29,12 @@ class Payment extends Model
 
     public const STATUS_AI_PROCESSING_FAILED = 'AI_PROCESSING_FAILED';
 
+    protected $attributes = [
+        'currency' => 'IDR',
+        'payment_method' => 'QRIS',
+        'status' => self::STATUS_PENDING,
+    ];
+
     protected $fillable = [
         'business_id',
         'invoice_id',
@@ -65,6 +71,16 @@ class Payment extends Model
     public function proof(): HasOne
     {
         return $this->hasOne(PaymentProof::class);
+    }
+
+    public function validationResult(): HasOne
+    {
+        return $this->hasOne(PaymentValidationResult::class);
+    }
+
+    public function riskAssessment(): HasOne
+    {
+        return $this->hasOne(PaymentRiskAssessment::class);
     }
 
     /**

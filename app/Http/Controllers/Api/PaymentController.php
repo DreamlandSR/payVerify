@@ -79,4 +79,28 @@ class PaymentController extends Controller
             'payment' => $payment,
         ]);
     }
+
+    /**
+     * Get complete AI extraction, validation results, and risk assessment findings for a payment.
+     */
+    public function analysis(string $id): JsonResponse
+    {
+        $payment = Payment::with([
+            'invoice',
+            'proof.extraction',
+            'validationResult',
+            'riskAssessment.duplicateProof',
+        ])->findOrFail($id);
+
+        return response()->json([
+            'payment' => $payment,
+            'expected' => [
+                'amount' => (float) $payment->expected_amount,
+                'currency' => $payment->currency,
+            ],
+            'extraction' => $payment->proof?->extraction,
+            'validation' => $payment->validationResult,
+            'risk' => $payment->riskAssessment,
+        ]);
+    }
 }
