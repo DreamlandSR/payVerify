@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BusinessController;
 use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\PaymentProofController;
 use Illuminate\Support\Facades\Route;
 
 // Public Auth routes
@@ -31,4 +32,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Payments API
     Route::apiResource('payments', PaymentController::class)->only(['index', 'store', 'show']);
+
+    // Payment Proof API
+    Route::post('/payments/{id}/proof', [PaymentProofController::class, 'upload']);
+    Route::get('/payments/{id}/proof', [PaymentProofController::class, 'show']);
 });
