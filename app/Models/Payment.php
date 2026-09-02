@@ -83,6 +83,11 @@ class Payment extends Model
         return $this->hasOne(PaymentRiskAssessment::class);
     }
 
+    public function verification(): HasOne
+    {
+        return $this->hasOne(PaymentVerification::class);
+    }
+
     /**
      * Generate a unique payment reference number.
      */

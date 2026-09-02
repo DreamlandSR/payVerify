@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\BusinessController;
 use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\PaymentProofController;
+use App\Http\Controllers\Api\PaymentVerificationController;
 use Illuminate\Support\Facades\Route;
 
 // Public Auth routes
@@ -39,4 +40,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Payment Validation & Risk Analysis API
     Route::get('/payments/{id}/analysis', [PaymentController::class, 'analysis']);
+
+    // Human Verification API
+    Route::post('/payments/{id}/verify', [PaymentVerificationController::class, 'verify']);
 });
