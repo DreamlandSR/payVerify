@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UploadProofRequest;
+use App\Jobs\ProcessPaymentProofAiJob;
 use App\Models\Payment;
 use App\Models\PaymentProof;
 use App\Services\AuditLoggerService;
@@ -64,8 +65,11 @@ class PaymentProofController extends Controller
             ]
         );
 
+        // Dispatch background AI extraction job
+        ProcessPaymentProofAiJob::dispatch($proof);
+
         return response()->json([
-            'message' => 'Payment proof uploaded successfully.',
+            'message' => 'Payment proof uploaded successfully. AI processing queued.',
             'proof' => $proof,
             'payment' => $payment->fresh(),
         ], 201);

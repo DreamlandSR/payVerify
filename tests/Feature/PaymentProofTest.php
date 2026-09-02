@@ -2,12 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\Jobs\ProcessPaymentProofAiJob;
 use App\Models\Business;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -18,6 +20,7 @@ class PaymentProofTest extends TestCase
     public function test_user_can_upload_valid_payment_proof(): void
     {
         Storage::fake('local');
+        Queue::fake();
 
         $business = Business::create(['name' => 'Store D', 'slug' => 'store-d']);
         $user = User::create([
@@ -56,6 +59,8 @@ class PaymentProofTest extends TestCase
         $response->assertStatus(201)
             ->assertJsonPath('payment.status', Payment::STATUS_PROOF_UPLOADED)
             ->assertJsonPath('proof.file_name', 'transfer_receipt.jpg');
+
+        Queue::assertPushed(ProcessPaymentProofAiJob::class);
 
         $this->assertDatabaseHas('payment_proofs', [
             'payment_id' => $payment->id,
