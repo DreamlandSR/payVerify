@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BusinessController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\PaymentProofController;
 use App\Http\Controllers\Api\PaymentVerificationController;
+use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\WebhookController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +24,12 @@ Route::middleware('auth:sanctum')->group(function () {
     // User profile & auth
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
+
+    // Dashboard Analytics API
+    Route::get('/dashboard/stats', [DashboardController::class, 'stats']);
+
+    // Reports API
+    Route::get('/reports/transactions', [ReportController::class, 'transactions']);
 
     // Business tenant management
     Route::prefix('business')->group(function () {
