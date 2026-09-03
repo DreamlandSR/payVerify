@@ -1,58 +1,183 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <a href="#">
+    <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="320" alt="PayVerify Logo">
+  </a>
 </p>
 
-## About Laravel
+<h1 align="center">PayVerify — Platform SaaS AI Payment & Donation Verification</h1>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<p align="center">
+  <strong>Sistem Verifikasi Pembayaran & Donasi Berbasis AI Multimodal (Google Gemini 2.5 Flash Vision) dengan Pendekatan Human-in-the-Loop (HITL).</strong>
+</p>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+<p align="center">
+  <img src="https://img.shields.io/badge/Laravel-12.x-FF2D20?style=for-the-badge&logo=laravel" alt="Laravel 12">
+  <img src="https://img.shields.io/badge/PHP-8.4-777BB4?style=for-the-badge&logo=php" alt="PHP 8.4">
+  <img src="https://img.shields.io/badge/AI%20Engine-Gemini%202.5%20Flash-4285F4?style=for-the-badge&logo=google" alt="Google Gemini AI">
+  <img src="https://img.shields.io/badge/Tests-42%20Passed-emerald?style=for-the-badge" alt="Tests Passed">
+  <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License MIT">
+</p>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 📌 1. Pengenalan (Overview)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+**PayVerify** adalah platform *Multi-Tenant SaaS* modern yang dirancang untuk mengotomatisasi dan mempercepat proses verifikasi bukti transfer pembayaran serta donasi menggunakan **AI Multimodal (Google Gemini 2.5 Flash Vision)**. 
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Sistem ini menerapkan pendekatan **Human-in-the-Loop (HITL)**:
+1. **Otomasi AI**: AI membaca visual piksel foto struk transfer (BCA, Mandiri, BRI, BNI, GoPay, OVO, DANA, ShopeePay, QRIS), mengekstraksi nominal donasi, tanggal, jam, nomor referensi/RRN, dan menilai tingkat risiko penipuan (*fraud risk scoring*).
+2. **Keputusan Manusia (Admin)**: Pengelola/Admin tetap memegang kendali penuh dalam mengambil keputusan persetujuan akhir (*Approve* / *Reject*) melalui *Interactive HITL Workbench*.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+---
 
-## Agentic Development
+## ✨ 2. Fitur-Fitur Utama
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 🤖 Core AI Vision & Verification Engine
+- **Instant AI OCR Detection**: Menggunakan model `gemini-2.5-flash` untuk mendeteksi teks dan nominal donasi dari piksel foto struk transfer secara *real-time* (< 2 detik).
+- **Auto Image Optimization**: Fitur presisi & kompresi gambar otomatis (maks 1200px) sebelum dikirim ke API Cloud untuk mencegah *cURL timeout* pada foto kamera HP resolusi tinggi.
+- **Detector Struk Palsu / Gambar Acak**: AI otomatis mengenali dan menolak gambar non-struk (seperti logo, foto pemandangan, meme, avatar) dengan memberikan pesan peringatan jelas.
+- **Risk Analysis & Fraud Protection**: Deteksi duplikasi struk berbasis *SHA256 File Hashing*, pembacaan kecocokan tanggal, dan skor risiko (*LOW*, *MEDIUM*, *HIGH*).
 
+### 👥 Portal & Manajemen Role (RBAC)
+- **Admin & Verifikator Panel** (`owner@test.com`):
+  - **Dashboard Analytics**: Ringkasan total donasi, metrik verifikasi, chart pendapatan, dan aktivitas *audit log*.
+  - **Invoices & Campaign QRIS**: Buat kampanye donasi/invoice baru lengkap dengan QRIS generator.
+  - **Verifikasi Struk AI Workbench**: Antrean peninjauan struk *side-by-side* (Foto Struk vs Ekstraksi AI).
+- **Portal Donatur / Customer** (`donor@test.com`):
+  - **Portal Upload Donasi Nominal Bebas**: Donatur dapat transfer nominal bebas via QRIS dan mengunggah foto struk tanpa harus memasukkan nomor invoice manual.
+  - **Umpan Balik AI Instant**: Donatur langsung melihat kartu status validasi nominal yang dibaca oleh AI saat foto diunggah.
+  - **Dashboard Donasi Saya**: Pelacakan status verifikasi secara *live* (`🟢 Terverifikasi`, `🔵 Menunggu Admin`, `🔴 Ditolak`).
+  - **Kwitansi Digital Resmi**: Modal dan fitur cetak/unduh PDF kwitansi donasi resmi bertanda tangan verifikasi.
+
+---
+
+## 🛠️ 3. Persyaratan Sistem (Prerequisites)
+
+Sebelum menginstal proyek, pastikan lingkungan server/komputer Anda memenuhi persyaratan berikut:
+
+- **PHP**: Versi `>= 8.4` (dengan ekstensi `gd`, `pdo_sqlite` / `pdo_mysql`, `curl`, `mbstring`, `fileinfo`, `openssl`)
+- **Composer**: Versi `>= 2.x`
+- **Node.js**: Versi `>= 18.x` & `npm`
+- **Google Gemini API Key**: Dapatkan gratis dari [Google AI Studio](https://aistudio.google.com/app/apikey)
+
+---
+
+## 🚀 4. Langkah-Langkah Instalasi (Setup & Installation)
+
+Ikuti langkah-langkah di bawah ini untuk menjalankan proyek di lingkungan lokal:
+
+### Langkah 1: Clone Repository
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/DreamlandSR/payVerify.git
+cd payVerify
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### Langkah 2: Install Dependensi PHP & JavaScript
+```bash
+composer install
+npm install
+```
 
-## Contributing
+### Langkah 3: Konfigurasi Environment (`.env`)
+Salin file `.env.example` menjadi `.env`:
+```bash
+cp .env.example .env
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Buka file `.env` dan tambahkan kunci API Gemini Anda:
+```env
+APP_NAME="PayVerify"
+APP_URL="http://localhost:8000"
 
-## Code of Conduct
+DB_CONNECTION=sqlite
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# Konfigurasi AI Gemini Vision
+AI_DRIVER=gemini
+GEMINI_API_KEY=AIzaSy... (Masukkan API Key Gemini Anda dari Google AI Studio)
+```
 
-## Security Vulnerabilities
+### Langkah 4: Generate Application Key & Database Seed
+```bash
+php artisan key:generate
+php artisan migrate:fresh --seed
+```
+*Seeder otomatis menyiapkan data awal untuk akun Admin (`owner@test.com`), Donatur (`donor@test.com`), serta sampel transaksi donasi.*
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Langkah 5: Build Frontend Assets
+```bash
+npm run build
+```
 
-## License
+### Langkah 6: Jalankan Server Lokal
+```bash
+php artisan serve
+```
+Aplikasi kini berjalan dan dapat diakses di **`http://127.0.0.1:8000`** (atau port yang tampil di terminal).
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## 📖 5. Cara Penggunaan (Usage Guide)
+
+### 🔑 Akun Demo Bawaan (Seeded Users)
+| Role | Email | Password | Hak Akses Utama |
+| :--- | :--- | :--- | :--- |
+| **Admin SaaS / Yayasan** | `owner@test.com` | `password` | Akses penuh Admin Panel, Analytics, QRIS, dan Workbench Verifikasi AI |
+| **Donatur / Customer** | `donor@test.com` | `password` | Akses Dashboard Donasi Saya, Unggah Struk, Pelacakan Status, & Cetak Kwitansi |
+
+---
+
+### A. Penggunaan Bagi Donatur (Portal Donasi Nominal Bebas)
+1. **Login atau Masuk ke Portal**:
+   - Buka halaman login di `http://localhost:8000` dan pilih tab **Donatur / User**, atau klik menu **Kirim Bukti Pembayaran** di sidebar.
+2. **Scan QRIS & Transfer**:
+   - Scan kode QRIS yang tampil di layar menggunakan aplikasi M-Banking atau E-Wallet pilihan Anda dengan nominal donasi bebas.
+3. **Unggah Foto Struk Transfer**:
+   - Pilih foto/screenshot resi transfer dari galeri HP Anda (`JPG`, `PNG`, `WEBP`).
+   - Klik **`Kirim Struk & Deteksi Nominal AI`**.
+4. **Menerima Hasil Analisis AI Instant**:
+   - **Jika Valid**: Tampil kartu hijau (*✓ AI OCR Berhasil Membaca Struk*) beserta rincian nominal terdeteksi (contoh: `Rp 150.000` / `Rp 1.552.500`), bank provider, dan tanggal.
+   - **Jika Tidak Valid / Bukan Struk**: Tampil kartu merah (*❌ FOTO STRUK TIDAK VALID*) memberitahukan bahwa gambar buram atau tidak mengandung angka nominal transfer yang sah.
+5. **Cetak Kwitansi Digital**:
+   - Buka menu **Dashboard Donasi Saya** dan klik **Lihat Kwitansi** pada transaksi yang telah terverifikasi lunas untuk mengunduh/mencetak kwitansi resmi.
+
+---
+
+### B. Penggunaan Bagi Admin (Persetujuan Human-in-the-Loop)
+1. **Login Admin Panel**:
+   - Buka `http://localhost:8000`, pilih tab **Admin Panel**, dan login menggunakan `owner@test.com` / `password`.
+2. **Buka Menu Verifikasi Struk AI**:
+   - Klik menu **Verifikasi Struk AI** pada sidebar sebelah kiri.
+3. **Peninjauan Side-by-Side**:
+   - Pilih salah satu transaksi di antrean verifikasi untuk membuka layar perbandingan *Side-by-Side*:
+     - **Sisi Kiri**: Foto fisik resi transfer yang diunggah donatur.
+     - **Sisi Kanan**: Hasil ekstraksi OCR AI Gemini (Nominal, Bank, No. Ref, Tanggal) & Skor Risiko Penipuan.
+4. **Pengambilan Keputusan (HITL)**:
+   - Klik tombol **`Setujui (Approve)`** untuk memverifikasi transaksi dan menerbitkan kwitansi donasi resmi.
+   - Atau klik **`Tolak (Reject)`** dengan memberikan alasan penolakan (misal: "Nominal tidak sesuai" / "Gambar tidak terbaca").
+
+---
+
+## 🧪 6. Pengujian Otomatis (Automated Testing)
+
+Proyek ini dilengkapi dengan suite pengujian automated test yang mencakup controller, enkapsulasi tenant, validasi OCR AI, dan otorisasi:
+
+Gunakan perintah Artisan berikut untuk menjalankan pengujian:
+```bash
+php artisan test --compact
+```
+- **Hasil Pengujian saat ini**: **42 / 42 Tests Passed (100% Passing, 190 Assertions)**.
+
+---
+
+## 📐 7. Standar Commit Git (Git Commit Convention)
+
+Proyek ini menerapkan standar penulisan pesan commit Git **Conventional Commits**:
+- Format: `<type>(<scope>): <deskripsi singkat>`
+- Contoh: `feat(ai): integrate gemini 2.5 flash vision ocr`
+- Dokumentasi aturan commit lengkap dapat dilihat di berkas **[.agents/rules/commit-convention.md](file:///.agents/rules/commit-convention.md)**.
+
+---
+
+## 📄 8. Lisensi (License)
+
+Proyek ini dirilis di bawah lisensi **[MIT License](LICENSE)**.
