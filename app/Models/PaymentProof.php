@@ -31,4 +31,9 @@ class PaymentProof extends Model
     {
         return $this->hasOne(PaymentExtraction::class, 'payment_proof_id');
     }
+
+    public function validationResult(): HasOne
+    {
+        return $this->hasOne(PaymentValidationResult::class, 'payment_id', 'payment_id');
+    }
 }

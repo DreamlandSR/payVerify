@@ -1,27 +1,60 @@
-*.log
-.DS_Store
+# Environment files & Secrets
 .env
-.env.backup
-.env.production
-.phpactor.json
+.env.*
+!.env.example
+*.pem
+*.key
+auth.json
+
+# Scratch & Temporary Debug Files
+/scratch/
+*.log
+
+# SQLite Databases
+/database/*.sqlite
+/database/*.sqlite-journal
+
+# Storage & Uploaded Payment Proofs
+/storage/app/*
+!/storage/app/.gitignore
+!/storage/app/public
+/storage/app/public/*
+!/storage/app/public/.gitignore
+/storage/app/payment_proofs/
+/storage/app/private/
+/storage/framework/cache/*
+!/storage/framework/cache/.gitignore
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+/storage/framework/testing/*
+!/storage/framework/testing/.gitignore
+/storage/pail
 .phpunit.result.cache
-/.codex
-/.cursor/
-/.idea
-/.nova
 /.phpunit.cache
-/.vscode
-/.zed
-/auth.json
+
+# Dependencies & Node
 /node_modules
+/vendor
+
+# Frontend Build Assets
 /public/build
 /public/fonts-manifest.dev.json
 /public/hot
 /public/storage
-/storage/*.key
-/storage/pail
-/vendor
+
+# IDE & OS Files
+.DS_Store
+Thumbs.db
+/.idea
+/.vscode
+/.codex
+/.cursor/
+/.nova
+/.zed
+.gemini/
+.phpactor.json
 _ide_helper.php
 Homestead.json
 Homestead.yaml
-Thumbs.db

@@ -9,5 +9,5 @@ interface AIExtractionProviderInterface
     /**
      * Extract structured payment details from payment proof image.
      */
-    public function extractFromImage(string $absoluteImagePath): ExtractionResultDTO;
+    public function extractFromImage(string $absoluteImagePath, ?string $originalFilename = null): ExtractionResultDTO;
 }

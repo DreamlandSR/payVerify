@@ -14,6 +14,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProcessPaymentProofAiJob implements ShouldQueue
 {
@@ -33,10 +35,20 @@ class ProcessPaymentProofAiJob implements ShouldQueue
             'status' => Payment::STATUS_AI_PROCESSING,
         ]);
 
-        $absolutePath = storage_path('app/'.$this->proof->file_path);
+        $absolutePath = Storage::disk('local')->path($this->proof->file_path);
+        if (! file_exists($absolutePath)) {
+            $absolutePath = storage_path('app/'.$this->proof->file_path);
+        }
+        if (! file_exists($absolutePath)) {
+            $absolutePath = storage_path('app/private/'.$this->proof->file_path);
+        }
+        if (! file_exists($absolutePath) && Str::startsWith($this->proof->file_path, 'private/')) {
+            $trimmed = Str::after($this->proof->file_path, 'private/');
+            $absolutePath = storage_path('app/private/'.$trimmed);
+        }
 
         $aiService = new AIExtractionService($this->customProvider);
-        $result = $aiService->extractFromProof($absolutePath);
+        $result = $aiService->extractFromProof($absolutePath, $this->proof->file_name);
 
         // Delete existing extraction if any
         PaymentExtraction::where('payment_proof_id', $this->proof->id)->delete();

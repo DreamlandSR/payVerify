@@ -21,8 +21,8 @@ class AIExtractionService
         };
     }
 
-    public function extractFromProof(string $absoluteImagePath): ExtractionResultDTO
+    public function extractFromProof(string $absoluteImagePath, ?string $originalFilename = null): ExtractionResultDTO
     {
-        return $this->provider->extractFromImage($absoluteImagePath);
+        return $this->provider->extractFromImage($absoluteImagePath, $originalFilename);
     }
 }

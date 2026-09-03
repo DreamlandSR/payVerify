@@ -14,7 +14,8 @@ class UploadProofRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'proof' => ['required', 'file', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'proof' => ['required_without:proof_image', 'nullable', 'file', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'proof_image' => ['required_without:proof', 'nullable', 'file', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
         ];
     }
 }

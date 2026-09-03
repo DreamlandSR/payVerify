@@ -1412,7 +1412,7 @@ Then provide:
 
 ### B. Recommended Architecture
 
-### C. Database ERD proposal
+### C. Database ERD proposalv
 
 ### D. API architecture
 
